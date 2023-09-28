@@ -18,8 +18,6 @@ import {
 } from "./hiking-info-card.styles";
 
 import { HikingContext } from "../../../services/hikings/hiking.context";
-import { Modal } from "react-native-paper";
-import { UpSert } from "./upSert.component";
 
 const images = [
   "https://images.pexels.com/photos/532803/pexels-photo-532803.jpeg?cs=srgb&dl=pexels-pixabay-532803.jpg&fm=jpg",
@@ -29,7 +27,7 @@ const images = [
   "https://nguoivietnam.vn/wp-content/uploads/2023/03/jft.jpeg",
 ];
 
-export const HikingInfoCard = ({onUpdate, hiking = {} }) => {
+export const HikingInfoCard = ({ onUpdate, hiking = {} }) => {
   const ratingArray = Array.from(new Array(Math.floor(5)));
   let randomNumber = Math.floor(Math.random() * 4);
 
@@ -89,7 +87,10 @@ export const HikingInfoCard = ({onUpdate, hiking = {} }) => {
             </HikingDescription>
           </Section>
           <View style={styles.container}>
-            <TouchableOpacity onPress={()=>onUpdate(hiking)} style={styles.buttonUpdate}>
+            <TouchableOpacity
+              onPress={() => onUpdate(hiking)}
+              style={styles.buttonUpdate}
+            >
               <Text style={styles.buttonText}>Update</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={onDelete} style={styles.buttonDelete}>

@@ -2,30 +2,33 @@ import React, { useState, useContext, useRef } from "react";
 import { View, ScrollView, StyleSheet } from "react-native";
 import { TextInput, Button } from "react-native-paper";
 import { Text } from "../../../components/typography/text.components";
-import DateTimePicker from "@react-native-community/datetimepicker";
+// import DateTimePicker from "@react-native-community/datetimepicker";
 import { Picker } from "@react-native-picker/picker";
 import { Spacer } from "../../../components/spacer/spacer.component";
 import { HikingContext } from "../../../services/hikings/hiking.context";
 
-export const UpSert = ({onClose, updateHiking}) => {
+export const UpSert = ({ onClose, updateHiking }) => {
   const { createHiking, update } = useContext(HikingContext);
-  let initialValue = updateHiking !== undefined ? {
-    name: updateHiking.name,
-    location: updateHiking.location,
-    date: new Date(updateHiking.date),
-    parkingAvailable: updateHiking.parkingAvailable,
-    lengthOfHike: String(updateHiking.lengthOfHike),
-    difficultLevel: updateHiking.difficultLevel,
-    description: updateHiking.description,
-  } : {
-    name: "",
-    location: "",
-    date: new Date(),
-    parkingAvailable: false,
-    lengthOfHike: "0",
-    difficultLevel: "Hard",
-    description: "",
-  }
+  let initialValue =
+    updateHiking !== undefined
+      ? {
+          name: updateHiking.name,
+          location: updateHiking.location,
+          date: new Date(updateHiking.date),
+          parkingAvailable: updateHiking.parkingAvailable,
+          lengthOfHike: String(updateHiking.lengthOfHike),
+          difficultLevel: updateHiking.difficultLevel,
+          description: updateHiking.description,
+        }
+      : {
+          name: "",
+          location: "",
+          date: new Date(),
+          parkingAvailable: false,
+          lengthOfHike: "0",
+          difficultLevel: "Hard",
+          description: "",
+        };
   const [formData, setFormData] = useState(initialValue);
 
   const [errors, setErrors] = useState({});
@@ -71,19 +74,23 @@ export const UpSert = ({onClose, updateHiking}) => {
 
     // Validate the name field
     if (!formData.name) {
-      validationErrors.name = 'Name is required';
+      validationErrors.name = "Name is required";
     }
 
     if (!formData.location) {
-      validationErrors.location = 'Location is required';
+      validationErrors.location = "Location is required";
     }
 
-    if (typeof formData.parkingAvailable !== 'boolean') {
-      validationErrors.parkingAvailable = 'Parking Available is required';
+    if (typeof formData.parkingAvailable !== "boolean") {
+      validationErrors.parkingAvailable = "Parking Available is required";
     }
 
-    if (!formData.lengthOfHike || formData.lengthOfHike < 0 || typeof formData.lengthOfHike !== "number") {
-      validationErrors.lengthOfHike = 'Length Of Hike is a number and required';
+    if (
+      !formData.lengthOfHike ||
+      formData.lengthOfHike < 0 ||
+      typeof formData.lengthOfHike !== "number"
+    ) {
+      validationErrors.lengthOfHike = "Length Of Hike is a number and required";
     }
 
     // Add more validation rules as needed for other fields
@@ -91,14 +98,13 @@ export const UpSert = ({onClose, updateHiking}) => {
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length === 0) {
-      if(updateHiking === undefined){
-        createHiking(formData)
-      }
-      else{
-        update(updateHiking.id, formData)
+      if (updateHiking === undefined) {
+        createHiking(formData);
+      } else {
+        update(updateHiking.id, formData);
       }
 
-      alert('Form submitted successfully');
+      alert("Form submitted successfully");
       onClose();
     }
   };
@@ -130,14 +136,14 @@ export const UpSert = ({onClose, updateHiking}) => {
         onFocus={() => setShowDatePicker(true)}
         style={styles.textInput}
       />
-      {showDatePicker && (
+      {/* {showDatePicker && (
         <DateTimePicker
           value={formData.date}
           mode="date"
           display="default"
           onChange={handleDateChange}
         />
-      )}
+      )} */}
       <Spacer position="bottom" size="medium" />
       {/* ParkingAvailable input */}
       <TextInput
@@ -145,22 +151,26 @@ export const UpSert = ({onClose, updateHiking}) => {
         value={formData.parkingAvailable ? "YES" : "NO"}
         error={!!errors.parkingAvailable}
         onFocus={() => openParking()}
-        onBlur={()=>closeParking()}
+        onBlur={() => closeParking()}
         style={styles.textInput}
       />
-      <View style={{display: 'none'}}>
+      <View style={{ display: "none" }}>
         <Picker
           ref={pickerPackingRef}
           selectedValue={formData.parkingAvailable}
-          onValueChange={(itemValue, itemIndex) => setFormData({ ...formData, parkingAvailable: itemValue === 'true' })}
+          onValueChange={(itemValue, itemIndex) =>
+            setFormData({ ...formData, parkingAvailable: itemValue === "true" })
+          }
         >
           <Picker.Item label="Please Choose Option" value="" />
           <Picker.Item label="YES" value="true" />
           <Picker.Item label="NO" value="false" />
         </Picker>
       </View>
-      
-      {errors.parkingAvailable && <Text variant="error">{errors.parkingAvailable}</Text>}
+
+      {errors.parkingAvailable && (
+        <Text variant="error">{errors.parkingAvailable}</Text>
+      )}
       <Spacer position="bottom" size="medium" />
       {/* LengthOfHike input */}
       <TextInput
@@ -170,7 +180,9 @@ export const UpSert = ({onClose, updateHiking}) => {
         error={!!errors.lengthOfHike}
         style={styles.textInput}
       />
-      {errors.lengthOfHike && <Text variant="error">{errors.lengthOfHike}</Text>}
+      {errors.lengthOfHike && (
+        <Text variant="error">{errors.lengthOfHike}</Text>
+      )}
       <Spacer position="bottom" size="medium" />
       {/* LengthOfHike input */}
       <TextInput
@@ -179,14 +191,18 @@ export const UpSert = ({onClose, updateHiking}) => {
         error={!!errors.difficultLevel}
         style={styles.textInput}
         onFocus={() => openDifficult()}
-        onBlur={()=>closeDifficult()}
+        onBlur={() => closeDifficult()}
       />
-      {errors.difficultLevel && <Text  variant="error">{errors.difficultLevel}</Text>}
-      <View style={{display: 'none'}}>
+      {errors.difficultLevel && (
+        <Text variant="error">{errors.difficultLevel}</Text>
+      )}
+      <View style={{ display: "none" }}>
         <Picker
           ref={pickerDifficultRef}
           selectedValue={formData.difficultLevel}
-          onValueChange={(itemValue, itemIndex) => setFormData({ ...formData, difficultLevel: itemValue })}
+          onValueChange={(itemValue, itemIndex) =>
+            setFormData({ ...formData, difficultLevel: itemValue })
+          }
         >
           <Picker.Item label="Hard" value="Hard" />
           <Picker.Item label="Medium" value="Medium" />
